@@ -30,7 +30,10 @@ code {
 	margin-bottom: 50px;
 }
 .wrapper {
-	display: flex;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(auto, 396px));
 	justify-content: center;
+	align-items: start;
 	gap: 30px;
+	flex-wrap: wrap;
 }

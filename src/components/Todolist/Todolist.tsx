@@ -1,35 +1,23 @@
 import { useActions } from '@/hooks/useActions'
-import { ITask } from '@/types/ITask'
-import { FilterValueType } from '@/types/ITodo'
-import { FC, memo, useMemo } from 'react'
+import { useTasks } from '@/hooks/useTasks'
+import { ITodo } from '@/types/ITodo'
+import { FC, memo, useCallback } from 'react'
 import { AddItemForm } from '../AddItemForm/AddItemForm'
 import EditableSpan from '../EditableSpan/EditableSpan'
 import Button from '../UI/button/Button'
 import TodoItem from './TodoItem/TodoItem'
 import styles from './Todolist.module.scss'
 
-
-
 interface TodolistPropsType {
-	todoID: string,
-	title: string
-	tasks: ITask[]
-	filter: FilterValueType
+	todo: ITodo
 }
 
-const Todolist: FC<TodolistPropsType> = memo(({ todoID, title, tasks, filter }) => {
+const Todolist: FC<TodolistPropsType> = memo(({ todo }) => {
 	const { addTaskAction, removeTodoAction, removeTaskAction, changeTodoTitleAction, changeTaskTitleAction, changeFilterValueAction, changeTaskStatusAction } = useActions()
 
-	const filteredTasks = useMemo(() => {
-		switch (filter) {
-			case 'Active':
-				return tasks.filter(el => !el.isDone)
-			case 'Completed':
-				return tasks.filter(el => el.isDone)
-			default:
-				return tasks
-		}
-	}, [tasks, filter])
+	const { filter, id: todoID, tasks, title } = todo
+
+	const filteredTasks = useTasks(tasks, filter)
 
 	const addTask = (title: string) => {
 		addTaskAction(todoID, title)
@@ -37,6 +25,18 @@ const Todolist: FC<TodolistPropsType> = memo(({ todoID, title, tasks, filter }) 
 	const changeTodoTitle = (title: string) => {
 		changeTodoTitleAction(todoID, title)
 	}
+
+	const removeTask = useCallback((taskID: string) => {
+		removeTaskAction(todoID, taskID)
+	}, [])
+
+	const changeTaskTitle = useCallback((taskID: string, title: string) => {
+		changeTaskTitleAction(todoID, taskID, title)
+	}, [])
+
+	const changeTaskStatus = useCallback((taskID: string, isDone: boolean) => {
+		changeTaskStatusAction(todoID, taskID, isDone)
+	}, [])
 
 	return (
 		<div className={styles.todolist}>
@@ -50,15 +50,6 @@ const Todolist: FC<TodolistPropsType> = memo(({ todoID, title, tasks, filter }) 
 			<div className={styles.body}>
 				<ul className={styles.list}>
 					{filteredTasks.map(task => {
-						const removeTask = (taskID: string) => {
-							removeTaskAction(todoID, taskID)
-						}
-						const changeTaskTitle = (title: string) => {
-							changeTaskTitleAction(todoID, task.id, title)
-						}
-						const changeTaskStatus = (isDone: boolean) => {
-							changeTaskStatusAction(todoID, task.id, isDone)
-						}
 						return (
 							< TodoItem
 								key={task.id}
