@@ -1,0 +1,25 @@
+.root {
+	position: relative;
+}
+.actions {
+	display: flex;
+	gap: 5px;
+	button {
+		background-color: #fff;
+		transition: all 0.3s ease 0s;
+		&:hover {
+			background-color: #0e15e7;
+			color: #fff;
+		}
+		&:active {
+			background-color: #090d96;
+		}
+	}
+}
+
+.error {
+	color: red;
+	position: absolute;
+	top: 100%;
+	left: 5px;
+}

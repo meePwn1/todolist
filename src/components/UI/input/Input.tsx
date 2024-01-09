@@ -2,7 +2,7 @@ import { FC, InputHTMLAttributes } from 'react'
 import style from './Input.module.scss'
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
-	error?: string
+	error?: boolean
 }
 
 const Input: FC<IInput> = ({ error, ...props }) => {

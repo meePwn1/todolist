@@ -1,0 +1,19 @@
+.root {
+	position: relative;
+	input:focus + .error {
+		transform: scale(0.8);
+		top: 0px;
+		left: 0px;
+	}
+}
+
+.error {
+	position: absolute;
+	top: 9px;
+	color: red;
+	left: 10px;
+	font-size: 14px;
+	white-space: nowrap;
+	pointer-events: none;
+	transition: all 0.3s ease 0s;
+}

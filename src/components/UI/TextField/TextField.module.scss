@@ -1,0 +1,15 @@
+.root {
+	position: relative;
+}
+.label {
+	position: absolute;
+	white-space: nowrap;
+	left: 16px;
+	top: 8px;
+	transition: all 0.3s ease 0s;
+}
+
+input:focus + .label {
+	top: -10px;
+	transform: scale(0.8);
+}

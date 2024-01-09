@@ -1,34 +1,36 @@
-import { ChangeEvent, FC } from 'react'
-import Button from '../../UI/button/Button'
-import Input from '../../UI/input/Input'
-import { TaskType } from '../Todolist'
-import style from './TodoItem.module.scss'
+import EditableSpan from '@/components/EditableSpan/EditableSpan'
+import Button from '@/components/UI/button/Button'
+import Input from '@/components/UI/input/Input'
+import { ITask } from '@/types/ITask'
+import { ChangeEvent, FC, memo } from 'react'
 
 interface TodoItemType {
-	task: TaskType
-	todoId: string
-	removeTask: (todoId: string, taskId: string) => void
-	changeTaskStatus: (todoId: string, id: string, isDone: boolean) => void
+	taskData: ITask
+	removeTask: (taskID: string) => void
+	changeTitle: (title: string) => void
+	changeStatus: (isDone: boolean) => void
 }
 
-const TodoItem: FC<TodoItemType> = ({ todoId, task, removeTask, changeTaskStatus }) => {
-	const onClickHandle = () => {
-		removeTask(todoId, task.id)
+const TodoItem: FC<TodoItemType> = memo(({ taskData, removeTask, changeTitle, changeStatus }) => {
+	const { id, isDone, title } = taskData
+
+	const removeTaskHandler = () => {
+		removeTask(id)
 	}
-	const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-		changeTaskStatus(todoId, task.id, e.target.checked)
+
+	const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+		changeStatus(e.target.checked)
 	}
+
 	return (
-		<li key={task.id}>
-			<label htmlFor={task.id}>
-				<Input id={task.id} type='checkbox' onChange={onChangeHandler} checked={task.isDone} />
-				<span className={task.isDone ? style.gray : ''} style={{ userSelect: 'none' }}>
-					{task.title}
-				</span>
+		<li>
+			<label >
+				<Input type='checkbox' checked={isDone} onChange={changeHandler} />
+				<EditableSpan title={title} changeTitle={changeTitle} />
 			</label>
-			<Button onClick={onClickHandle}>✖️</Button>
+			<Button onClick={removeTaskHandler}>✖️</Button>
 		</li>
 	)
-}
+})
 
 export default TodoItem

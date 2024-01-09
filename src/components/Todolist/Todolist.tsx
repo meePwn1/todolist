@@ -1,118 +1,98 @@
-import { ChangeEvent, FC, KeyboardEvent, useMemo, useState } from 'react'
-import { FilterValueType } from '../../App'
+import { useActions } from '@/hooks/useActions'
+import { ITask } from '@/types/ITask'
+import { FilterValueType } from '@/types/ITodo'
+import { FC, memo, useMemo } from 'react'
+import { AddItemForm } from '../AddItemForm/AddItemForm'
+import EditableSpan from '../EditableSpan/EditableSpan'
 import Button from '../UI/button/Button'
-import Input from '../UI/input/Input'
 import TodoItem from './TodoItem/TodoItem'
+import styles from './Todolist.module.scss'
 
-export interface TaskType {
-	id: string
-	title: string
-	isDone: boolean
-}
+
 
 interface TodolistPropsType {
-	id: string
+	todoID: string,
 	title: string
+	tasks: ITask[]
 	filter: FilterValueType
-	tasks: TaskType[]
-	createTask: (id: string, task: string) => void
-	removeTask: (todoId: string, taskId: string) => void
-	changeTaskStatus: (todoId: string, taskId: string, isDone: boolean) => void
-	changeFilter: (todoId: string, filterValue: FilterValueType) => void
 }
 
-const Todolist: FC<TodolistPropsType> = ({
-	id,
-	title,
-	tasks,
-	filter,
-	createTask,
-	removeTask,
-	changeTaskStatus,
-	changeFilter,
-}) => {
-	const [task, setTask] = useState<string>('')
-	const [error, setError] = useState<string>('')
+const Todolist: FC<TodolistPropsType> = memo(({ todoID, title, tasks, filter }) => {
+	const { addTaskAction, removeTodoAction, removeTaskAction, changeTodoTitleAction, changeTaskTitleAction, changeFilterValueAction, changeTaskStatusAction } = useActions()
 
-	const filteredTaks = useMemo(() => {
+	const filteredTasks = useMemo(() => {
 		switch (filter) {
 			case 'Active':
-				return tasks.filter(task => !task.isDone)
+				return tasks.filter(el => !el.isDone)
 			case 'Completed':
-				return tasks.filter(task => task.isDone)
+				return tasks.filter(el => el.isDone)
 			default:
 				return tasks
 		}
 	}, [tasks, filter])
 
-	const addNewTask = () => {
-		if (task.trim() !== '') {
-			createTask(id, task.trim())
-		} else {
-			setError('Title is required')
-		}
-		setTask('')
+	const addTask = (title: string) => {
+		addTaskAction(todoID, title)
 	}
-	const keyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter') {
-			addNewTask()
-		}
-	}
-	const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-		if (!(e.target.value.length > 15)) {
-			setTask(e.target.value)
-			setError('')
-		} else {
-			setError('max string length 15')
-		}
+	const changeTodoTitle = (title: string) => {
+		changeTodoTitleAction(todoID, title)
 	}
 
 	return (
-		<div className='todolist'>
-			<div className='todolist__header'>
-				<h3>{title}</h3>
-				<div className='todolist__new-task'>
-					<Input
-						error={error}
-						onKeyDown={keyDownHandler}
-						value={task}
-						onChange={onChangeHandler}
-						placeholder='New task'
-					/>
-					<Button disabled={!task} onClick={addNewTask}>
-						Add New
-					</Button>
+		<div className={styles.todolist}>
+			<div className={styles.header}>
+				<div className={styles.title}>
+					<EditableSpan title={title} changeTitle={changeTodoTitle} titleMode={true} />
+					<Button onClick={() => { removeTodoAction(todoID) }}>✖️</Button>
 				</div>
-				{error && <div style={{ color: 'red' }}>{error}</div>}
+				<AddItemForm addItem={addTask} />
 			</div>
-			<div className='todolist__body'>
-				<ul className='todolist__list'>
-					{filteredTaks.map(task => {
+			<div className={styles.body}>
+				<ul className={styles.list}>
+					{filteredTasks.map(task => {
+						const removeTask = (taskID: string) => {
+							removeTaskAction(todoID, taskID)
+						}
+						const changeTaskTitle = (title: string) => {
+							changeTaskTitleAction(todoID, task.id, title)
+						}
+						const changeTaskStatus = (isDone: boolean) => {
+							changeTaskStatusAction(todoID, task.id, isDone)
+						}
 						return (
-							<TodoItem
+							< TodoItem
 								key={task.id}
-								todoId={id}
-								task={task}
+								taskData={task}
 								removeTask={removeTask}
-								changeTaskStatus={changeTaskStatus}
+								changeTitle={changeTaskTitle}
+								changeStatus={changeTaskStatus}
 							/>
 						)
 					})}
 				</ul>
-				<div className='todolist__btns'>
-					<Button active={filter === 'All'} onClick={() => changeFilter(id, 'All')}>
+				<div className={styles.btns}>
+					<Button
+						active={filter === 'All'}
+						onClick={() => changeFilterValueAction(todoID, 'All')}
+					>
 						All
 					</Button>
-					<Button active={filter === 'Active'} onClick={() => changeFilter(id, 'Active')}>
+					<Button
+						active={filter === 'Active'}
+						onClick={() => changeFilterValueAction(todoID, 'Active')}
+					>
 						Active
 					</Button>
-					<Button active={filter === 'Completed'} onClick={() => changeFilter(id, 'Completed')}>
+					<Button
+						active={filter === 'Completed'}
+						onClick={() => changeFilterValueAction(todoID, 'Completed')}
+					>
 						Completed
 					</Button>
 				</div>
 			</div>
 		</div>
 	)
-}
+})
 
 export default Todolist
