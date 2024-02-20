@@ -1,9 +1,4 @@
-import {
-	AddTaskType,
-	ChangeTaskStatusType,
-	ChangeTaskTitleType,
-	RemoveTaskType,
-} from '@/types/ITask'
+import { AddTaskType, ChangeTaskStatusType, ChangeTaskTitleType, RemoveTaskType } from 'types/ITask'
 import {
 	AddTodoType,
 	ChangeTodoFilterValueType,
@@ -11,7 +6,7 @@ import {
 	FilterValueType,
 	RemoveTodoType,
 	TodosActionTypes,
-} from '@/types/ITodo'
+} from 'types/ITodo'
 
 export const addTodoAction = (todoTitle: string): AddTodoType => {
 	return {
@@ -27,10 +22,7 @@ export const removeTodoAction = (todoID: string): RemoveTodoType => {
 	}
 }
 
-export const changeTodoTitleAction = (
-	todoID: string,
-	todoTitle: string
-): ChangeTodoTitleType => {
+export const changeTodoTitleAction = (todoID: string, todoTitle: string): ChangeTodoTitleType => {
 	return {
 		type: TodosActionTypes.CHANGE_TODO_TITLE,
 		payload: {
@@ -40,10 +32,7 @@ export const changeTodoTitleAction = (
 	}
 }
 
-export const changeFilterValueAction = (
-	todoID: string,
-	fiterValue: FilterValueType
-): ChangeTodoFilterValueType => {
+export const changeFilterValueAction = (todoID: string, fiterValue: FilterValueType): ChangeTodoFilterValueType => {
 	return {
 		type: TodosActionTypes.CHANGE_FILTER_VALUE,
 		payload: {
@@ -53,10 +42,7 @@ export const changeFilterValueAction = (
 	}
 }
 
-export const addTaskAction = (
-	todoID: string,
-	taskTitle: string
-): AddTaskType => {
+export const addTaskAction = (todoID: string, taskTitle: string): AddTaskType => {
 	return {
 		type: TodosActionTypes.ADD_TASK,
 		payload: {
@@ -66,10 +52,7 @@ export const addTaskAction = (
 	}
 }
 
-export const removeTaskAction = (
-	todoID: string,
-	taskID: string
-): RemoveTaskType => {
+export const removeTaskAction = (todoID: string, taskID: string): RemoveTaskType => {
 	return {
 		type: TodosActionTypes.REMOVE_TASK,
 		payload: {
@@ -79,11 +62,7 @@ export const removeTaskAction = (
 	}
 }
 
-export const changeTaskTitleAction = (
-	todoID: string,
-	taskID: string,
-	newTitle: string
-): ChangeTaskTitleType => {
+export const changeTaskTitleAction = (todoID: string, taskID: string, newTitle: string): ChangeTaskTitleType => {
 	return {
 		type: TodosActionTypes.CHANGE_TASK_TITLE,
 		payload: {
@@ -94,11 +73,7 @@ export const changeTaskTitleAction = (
 	}
 }
 
-export const changeTaskStatusAction = (
-	todoID: string,
-	taskID: string,
-	isDone: boolean
-): ChangeTaskStatusType => {
+export const changeTaskStatusAction = (todoID: string, taskID: string, isDone: boolean): ChangeTaskStatusType => {
 	return {
 		type: TodosActionTypes.CHANGE_TASK_STATUS,
 		payload: {

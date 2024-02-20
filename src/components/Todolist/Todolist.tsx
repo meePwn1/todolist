@@ -1,8 +1,8 @@
-import { useActions } from '@/hooks/useActions'
-import { useTasks } from '@/hooks/useTasks'
-import { ITodo } from '@/types/ITodo'
-import { FC, memo, useCallback } from 'react'
-import { AddItemForm } from '../AddItemForm/AddItemForm'
+import {useActions} from 'hooks/useActions'
+import {useTasks} from 'hooks/useTasks'
+import {FC, memo, useCallback} from 'react'
+import {ITodo} from 'types/ITodo'
+import {AddItemForm} from '../AddItemForm/AddItemForm'
 import EditableSpan from '../EditableSpan/EditableSpan'
 import Button from '../UI/button/Button'
 import TodoItem from './TodoItem/TodoItem'
@@ -13,7 +13,15 @@ interface TodolistPropsType {
 }
 
 const Todolist: FC<TodolistPropsType> = memo(({ todo }) => {
-	const { addTaskAction, removeTodoAction, removeTaskAction, changeTodoTitleAction, changeTaskTitleAction, changeFilterValueAction, changeTaskStatusAction } = useActions()
+	const {
+		addTaskAction,
+		removeTodoAction,
+		removeTaskAction,
+		changeTodoTitleAction,
+		changeTaskTitleAction,
+		changeFilterValueAction,
+		changeTaskStatusAction,
+	} = useActions()
 
 	const { filter, id: todoID, tasks, title } = todo
 
@@ -43,7 +51,13 @@ const Todolist: FC<TodolistPropsType> = memo(({ todo }) => {
 			<div className={styles.header}>
 				<div className={styles.title}>
 					<EditableSpan title={title} changeTitle={changeTodoTitle} titleMode={true} />
-					<Button onClick={() => { removeTodoAction(todoID) }}>✖️</Button>
+					<Button
+						onClick={() => {
+							removeTodoAction(todoID)
+						}}
+					>
+						✖️
+					</Button>
 				</div>
 				<AddItemForm addItem={addTask} />
 			</div>
@@ -51,7 +65,7 @@ const Todolist: FC<TodolistPropsType> = memo(({ todo }) => {
 				<ul className={styles.list}>
 					{filteredTasks.map(task => {
 						return (
-							< TodoItem
+							<TodoItem
 								key={task.id}
 								taskData={task}
 								removeTask={removeTask}
@@ -62,22 +76,13 @@ const Todolist: FC<TodolistPropsType> = memo(({ todo }) => {
 					})}
 				</ul>
 				<div className={styles.btns}>
-					<Button
-						active={filter === 'All'}
-						onClick={() => changeFilterValueAction(todoID, 'All')}
-					>
+					<Button active={filter === 'All'} onClick={() => changeFilterValueAction(todoID, 'All')}>
 						All
 					</Button>
-					<Button
-						active={filter === 'Active'}
-						onClick={() => changeFilterValueAction(todoID, 'Active')}
-					>
+					<Button active={filter === 'Active'} onClick={() => changeFilterValueAction(todoID, 'Active')}>
 						Active
 					</Button>
-					<Button
-						active={filter === 'Completed'}
-						onClick={() => changeFilterValueAction(todoID, 'Completed')}
-					>
+					<Button active={filter === 'Completed'} onClick={() => changeFilterValueAction(todoID, 'Completed')}>
 						Completed
 					</Button>
 				</div>

@@ -1,8 +1,8 @@
-import EditableSpan from '@/components/EditableSpan/EditableSpan'
-import Button from '@/components/UI/button/Button'
-import Input from '@/components/UI/input/Input'
-import { ITask } from '@/types/ITask'
+import EditableSpan from 'components/EditableSpan/EditableSpan'
+import Button from 'components/UI/button/Button'
+import Input from 'components/UI/input/Input'
 import { ChangeEvent, FC, memo } from 'react'
+import { ITask } from 'types/ITask'
 
 interface TodoItemType {
 	taskData: ITask
@@ -27,7 +27,7 @@ const TodoItem: FC<TodoItemType> = memo(({ taskData, removeTask, changeTitle, ch
 
 	return (
 		<li>
-			<label >
+			<label>
 				<Input type='checkbox' checked={isDone} onChange={changeHandler} />
 				<EditableSpan title={title} changeTitle={changeTaskTitle} />
 			</label>
